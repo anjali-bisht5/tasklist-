@@ -1,0 +1,45 @@
+form {
+    margin: 3rem;
+    font-size: 1.2rem;
+}
+
+#new-task {
+    font-size: 1rem;
+    margin-top: 10px;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid lightseagreen;
+}
+
+#new-task-label {
+    font-weight: 600;
+}
+
+#submit-btn {
+    font-size: .9rem;
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: lightseagreen;
+    color: black;
+    border-style: none;
+    margin-left: 1rem;
+}
+
+#calendar-div {
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+    font-size: large;
+}
+
+#calendar {
+    padding: 5px;
+    font-weight: bolder;
+}
+#show-btn{
+    margin-left: 1rem;
+}
+#error-msg{
+    color: rgb(181, 83, 83);
+}

@@ -1,0 +1,57 @@
+#task-div {
+  list-style: none;
+  width:  90%;
+  max-width: 55rem;
+  margin: 2rem auto;
+  padding: 0;
+}
+li {
+  margin: 1rem 0;
+  padding: 0.7rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button {
+  background-color: lightseagreen;
+  color: black;
+  border-style: none;
+  padding: 8px;
+  border-radius: 5px;
+}
+#buttons {
+  display: flex;
+  width: 13rem;
+}
+#edit-btn {
+  width: 4rem;
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+#delete-btn {
+  width: 4rem;
+  background-color: rgb(129, 53, 53);
+  color: white;
+  font-size: 0.9rem;
+}
+#save-btn{
+  width: 4rem;
+  background-color: rgb(27, 81, 27);
+  color: white;
+  font-size: 0.9rem;
+  margin-right: 10px;
+}
+.input-field{
+  width: 20rem;
+  display: block;
+  word-wrap: break-word;
+  margin-right: 2rem;
+}
+#new-task-date{
+  width: 10rem;
+}
+#task-error{
+
+}
