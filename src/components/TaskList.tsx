@@ -1,9 +1,72 @@
 import React, { useState } from "react";
-import "./TaskList.css";
-import { useAppSelector } from "../hooks/hooks";
-import { useAppDispatch } from "../hooks/hooks";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { editTask, removeTask } from "../store/tasksSlice";
 import { Task } from "../task.model";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles({
+  taskDiv: {
+    listStyle: "none",
+    width: "90%;",
+    maxWidth: "55rem",
+    margin: "2rem auto",
+    padding: 0,
+  },
+  newTaskDate: {
+    width: "10rem",
+  },
+  li: {
+    margin: "1rem 0",
+    padding: "0.7rem",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
+    borderRadius: "6px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  saveBtn: {
+    width: "4rem",
+    backgroundColor: "rgb(27, 81, 27)",
+    color: "white",
+    fontSize: "0.9rem",
+    marginRight: "10px",
+    borderStyle: "none",
+    padding: "8px",
+    borderRadius: "5px",
+  },
+  editBtn: {
+    width: "4rem",
+    marginRight: "10px",
+    fontSize: "0.9rem",
+    backgroundColor: "lightseagreen",
+    color: "black",
+    borderStyle: "none",
+    padding: "8px",
+    borderRadius: "5px",
+  },
+  deleteBtn: {
+    width: "4rem",
+    backgroundColor: " rgb(129, 53, 53)",
+    color: "white",
+    fontSize: "0.9rem",
+    borderStyle: "none",
+    padding: "8px",
+    borderRadius: "5px",
+  },
+  inputField: {
+    width: "20rem",
+    display: "block",
+    wordWrap: "break-word",
+    marginRight: "2rem",
+  },
+  buttons: {
+    display: "flex",
+    width: "13rem",
+    borderStyle: "none",
+    padding: "8px",
+    borderRadius: "5px",
+  },
+});
 
 const getFilteredTasks = (tasks: Task[], selectedDate: string | null) => {
   if (!selectedDate) {
@@ -22,6 +85,8 @@ export const TaskList: React.FC = () => {
   const currentDate = new Date().toISOString().split("T")[0];
   const selectedDate = useAppSelector((state) => state.tasks.selectedDate);
   const filteredTasks = getFilteredTasks(tasks, selectedDate);
+
+  const classes = useStyles();
 
   const onEditTask = (ID: string, date: string) => {
     if (date < currentDate) {
@@ -47,37 +112,40 @@ export const TaskList: React.FC = () => {
   };
 
   return (
-    <ul id="task-div">
+    <ul className={classes.taskDiv}>
       {filteredTasks.map((task) => (
         <div key={task.id}>
-          <li key={task.id}>
+          <li className={classes.li}>
             <>
               {isedit && task.id === ID && task.date >= currentDate ? (
                 <input
-                  className="input-field"
+                  className={classes.inputField}
                   defaultValue={task.text}
                   onChange={onEdit}
                   autoFocus
                 ></input>
               ) : (
-                <p className="input-field">{task.text}</p>
+                <p className={classes.inputField}>{task.text}</p>
               )}
-              <span id="new-task-date">{task.date}</span>
+              <span className={classes.newTaskDate}>{task.date}</span>
             </>
-            <div id="buttons">
+            <div className={classes.buttons}>
               {isedit && task.id === ID && task.date >= currentDate ? (
-                <button id="save-btn" onClick={onSave}>
+                <button onClick={onSave} className={classes.saveBtn}>
                   Save
                 </button>
               ) : (
                 <button
-                  id="edit-btn"
+                  className={classes.editBtn}
                   onClick={() => onEditTask(task.id, task.date)}
                 >
                   Edit
                 </button>
               )}
-              <button id="delete-btn" onClick={() => onDeleteTask(task.id)}>
+              <button
+                className={classes.deleteBtn}
+                onClick={() => onDeleteTask(task.id)}
+              >
                 Delete
               </button>
             </div>
