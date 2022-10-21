@@ -1,6 +1,6 @@
 #task-div {
   list-style: none;
-  width:  90%;
+  width: 90%;
   max-width: 55rem;
   margin: 2rem auto;
   padding: 0;
@@ -36,22 +36,21 @@ button {
   color: white;
   font-size: 0.9rem;
 }
-#save-btn{
+#save-btn {
   width: 4rem;
   background-color: rgb(27, 81, 27);
   color: white;
   font-size: 0.9rem;
   margin-right: 10px;
 }
-.input-field{
+.input-field {
   width: 20rem;
   display: block;
   word-wrap: break-word;
   margin-right: 2rem;
 }
-#new-task-date{
+#new-task-date {
   width: 10rem;
 }
-#task-error{
-
+#task-error {
 }

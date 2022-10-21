@@ -1,6 +1,5 @@
-
-export interface Task{
-    id:string;
-    text: string;
-    date:string;
+export interface Task {
+  id: string;
+  text: string;
+  date: string;
 }
