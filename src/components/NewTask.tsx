@@ -3,16 +3,15 @@ import "./NewTask.css";
 import { addTask, showOnDate, showAll } from "../store/tasksSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 
-const NewTask: React.FC = () => {
+export const NewTask: React.FC = () => {
   const dispatch = useAppDispatch();
-  let currentDate = new Date().toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0];
   const [newTask, setNewTask] = useState<string>("");
   const [taskDate, setTaskDate] = useState<string>(currentDate);
   const selectedDate = useAppSelector((state) => state.tasks.selectedDate);
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    debugger;
     if (!newTask || !taskDate) {
       return;
     } else if (newTask && taskDate >= currentDate) {
@@ -90,5 +89,3 @@ const NewTask: React.FC = () => {
     </div>
   );
 };
-
-export default NewTask;

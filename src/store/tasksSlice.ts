@@ -26,7 +26,6 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<{ text: string; date: string }>) => {
-      debugger;
       state.tasks = [
         ...state.tasks,
         {
@@ -48,7 +47,6 @@ export const tasksSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; text: string; index: number }>
     ) => {
-      debugger;
       state.tasks[action.payload.index] = {
         ...state.tasks[action.payload.index],
         text: action.payload.text,

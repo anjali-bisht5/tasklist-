@@ -12,14 +12,14 @@ const getFilteredTasks = (tasks: Task[], selectedDate: string | null) => {
   return tasks.filter((task) => task.date === selectedDate);
 };
 
-const TaskList: React.FC = () => {
+export const TaskList: React.FC = () => {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector((state) => state.tasks.tasks);
   const [isedit, setIsEdit] = useState<boolean>(false);
   const [editedValue, setEditedValue] = useState<string>("");
   const [ID, setID] = useState<string>("");
   const [index, setIndex] = useState<number>(0);
-  let currentDate = new Date().toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0];
   const selectedDate = useAppSelector((state) => state.tasks.selectedDate);
   const filteredTasks = getFilteredTasks(tasks, selectedDate);
 
@@ -87,5 +87,3 @@ const TaskList: React.FC = () => {
     </ul>
   );
 };
-
-export default TaskList;
