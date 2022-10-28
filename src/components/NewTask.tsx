@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
 import { addTask, showOnDate, showAll } from "../store/tasksSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, TextField } from "@material-ui/core";
+import { Button, Stack } from "@mui/material";
 
 const useStyles = makeStyles({
   form: {
@@ -99,18 +100,20 @@ export const NewTask: React.FC = () => {
     <div>
       <form className={classes.form}>
         <div className={classes.calendarDiv}>
-          <input
-            type="date"
-            className={classes.calendar}
-            id="calendar"
-            onChange={handleDate}
-            value={selectedDate || ""}
-          />
-          <button type="submit" onClick={onShowAll} className={classes.showBtn}>
-            Show All Tasks
-          </button>
+          <Stack display="block" spacing={2} direction="row">
+            <input
+              type="date"
+              className={classes.calendar}
+              id="calendar"
+              onChange={handleDate}
+              value={selectedDate || ""}
+            />
+            <Button variant="contained" onClick={onShowAll} size="small">
+              Show All Tasks
+            </Button>
+          </Stack>
         </div>
-        <div>
+        <Stack spacing={2} direction="column">
           <label
             htmlFor="new-task"
             id="new-task-label"
@@ -118,32 +121,33 @@ export const NewTask: React.FC = () => {
           >
             Input Task
           </label>
-          <input
-            type="text"
-            value={newTask}
-            id="new-task"
-            onChange={handleChange}
-            placeholder="Enter Tasks"
-            className={classes.newTask}
-            autoFocus
-          />
-        </div>
-        {taskDate < currentDate ? (
-          <p className={classes.errorMsg}>Do not enter past date!</p>
-        ) : null}
-        <input
-          type="date"
-          onChange={handleTaskDateChange}
-          value={taskDate}
-          defaultValue={currentDate}
-        />
-        <button
-          type="submit"
-          onClick={handleSubmit}
-          className={classes.submitBtn}
-        >
-          Add Task
-        </button>
+          <Stack spacing={2} direction="column">
+            <TextField
+              type="text"
+              label="Enter Tasks"
+              variant="outlined"
+              onChange={handleChange}
+              size="small"
+              value={newTask}
+            />
+          </Stack>
+          {taskDate < currentDate ? (
+            <p className={classes.errorMsg}>Do not enter past date!</p>
+          ) : null}
+
+          <Stack spacing={2} direction="row">
+            <input
+              type="date"
+              onChange={handleTaskDateChange}
+              value={taskDate}
+              defaultValue={currentDate}
+            />
+
+            <Button variant="contained" onClick={handleSubmit}>
+              Add Task
+            </Button>
+          </Stack>
+        </Stack>
       </form>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { editTask, removeTask } from "../store/tasksSlice";
 import { Task } from "../task.model";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
   taskDiv: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   saveBtn: {
-    width: "4rem",
+    width: "4.5rem",
     backgroundColor: "rgb(27, 81, 27)",
     color: "white",
     fontSize: "0.9rem",
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     borderRadius: "5px",
   },
   editBtn: {
-    width: "4rem",
+    width: "4.5rem",
     marginRight: "10px",
     fontSize: "0.9rem",
     backgroundColor: "lightseagreen",
@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     borderRadius: "5px",
   },
   deleteBtn: {
-    width: "4rem",
+    width: "4.5rem",
     backgroundColor: " rgb(129, 53, 53)",
     color: "white",
     fontSize: "0.9rem",
@@ -131,23 +131,29 @@ export const TaskList: React.FC = () => {
             </>
             <div className={classes.buttons}>
               {isedit && task.id === ID && task.date >= currentDate ? (
-                <button onClick={onSave} className={classes.saveBtn}>
+                <Button
+                  variant="contained"
+                  onClick={onSave}
+                  className={classes.saveBtn}
+                >
                   Save
-                </button>
+                </Button>
               ) : (
-                <button
-                  className={classes.editBtn}
+                <Button
+                  variant="contained"
                   onClick={() => onEditTask(task.id, task.date)}
+                  className={classes.editBtn}
                 >
                   Edit
-                </button>
+                </Button>
               )}
-              <button
-                className={classes.deleteBtn}
+              <Button
+                variant="contained"
                 onClick={() => onDeleteTask(task.id)}
+                className={classes.deleteBtn}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </li>
         </div>

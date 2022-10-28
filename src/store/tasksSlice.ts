@@ -4,8 +4,6 @@ import type { RootState } from "./store";
 // Define a type for the slice state
 interface Task {
   id: string;
-  isEdit: boolean;
-  done: boolean;
   text: string;
   date: string;
 }
@@ -31,8 +29,6 @@ export const tasksSlice = createSlice({
         {
           id: Math.random().toString(),
           text: action.payload.text,
-          done: false,
-          isEdit: false,
           date: action.payload.date,
         },
       ];
