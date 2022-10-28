@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
 import { editTask, removeTask } from "../store/tasksSlice";
 import { Task } from "../task.model";
-import { makeStyles, Button } from "@material-ui/core";
+import { makeStyles, Button, TextField } from "@material-ui/core";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Stack } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const useStyles = makeStyles({
   taskDiv: {
@@ -24,47 +31,11 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  saveBtn: {
-    width: "4.5rem",
-    backgroundColor: "rgb(27, 81, 27)",
-    color: "white",
-    fontSize: "0.9rem",
-    marginRight: "10px",
-    borderStyle: "none",
-    padding: "8px",
-    borderRadius: "5px",
-  },
-  editBtn: {
-    width: "4.5rem",
-    marginRight: "10px",
-    fontSize: "0.9rem",
-    backgroundColor: "lightseagreen",
-    color: "black",
-    borderStyle: "none",
-    padding: "8px",
-    borderRadius: "5px",
-  },
-  deleteBtn: {
-    width: "4.5rem",
-    backgroundColor: " rgb(129, 53, 53)",
-    color: "white",
-    fontSize: "0.9rem",
-    borderStyle: "none",
-    padding: "8px",
-    borderRadius: "5px",
-  },
   inputField: {
     width: "20rem",
     display: "block",
     wordWrap: "break-word",
     marginRight: "2rem",
-  },
-  buttons: {
-    display: "flex",
-    width: "13rem",
-    borderStyle: "none",
-    padding: "8px",
-    borderRadius: "5px",
   },
 });
 
@@ -78,30 +49,33 @@ const getFilteredTasks = (tasks: Task[], selectedDate: string | null) => {
 export const TaskList: React.FC = () => {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector((state) => state.tasks.tasks);
-  const [isedit, setIsEdit] = useState<boolean>(false);
   const [editedValue, setEditedValue] = useState<string>("");
   const [ID, setID] = useState<string>("");
   const [index, setIndex] = useState<number>(0);
   const currentDate = new Date().toISOString().split("T")[0];
   const selectedDate = useAppSelector((state) => state.tasks.selectedDate);
   const filteredTasks = getFilteredTasks(tasks, selectedDate);
-
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
-  const onEditTask = (ID: string, date: string) => {
-    if (date < currentDate) {
-      setIsEdit(false);
-    }
-    setIsEdit(true);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const onEditTask = (ID: string) => {
     setID(ID);
     setIndex(tasks.findIndex((x) => x.id === ID));
+    handleClickOpen();
   };
   const onSave = () => {
     if (editedValue) {
       dispatch(editTask({ id: ID, text: editedValue, index: index }));
-      setIsEdit(false);
+      handleClose();
     }
-    setIsEdit(false);
   };
   const onEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditedValue(event.target.value);
@@ -117,43 +91,59 @@ export const TaskList: React.FC = () => {
         <div key={task.id}>
           <li className={classes.li}>
             <>
-              {isedit && task.id === ID && task.date >= currentDate ? (
-                <input
-                  className={classes.inputField}
-                  defaultValue={task.text}
-                  onChange={onEdit}
-                  autoFocus
-                ></input>
-              ) : (
-                <p className={classes.inputField}>{task.text}</p>
-              )}
-              <span className={classes.newTaskDate}>{task.date}</span>
+              <p className={classes.inputField}>{task.text}</p>
+              <p>{task.date}</p>
             </>
-            <div className={classes.buttons}>
-              {isedit && task.id === ID && task.date >= currentDate ? (
+            <div>
+              <Stack spacing={2} direction="row">
                 <Button
-                  variant="contained"
-                  onClick={onSave}
-                  className={classes.saveBtn}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={() => onEditTask(task.id, task.date)}
-                  className={classes.editBtn}
+                  style={{
+                    backgroundColor: "#00adb5",
+                    color: "white",
+                    borderStyle: "none",
+                    width: 100,
+                  }}
+                  startIcon={<EditIcon />}
+                  variant="outlined"
+                  onClick={() => onEditTask(task.id)}
                 >
                   Edit
                 </Button>
-              )}
-              <Button
-                variant="contained"
-                onClick={() => onDeleteTask(task.id)}
-                className={classes.deleteBtn}
-              >
-                Delete
-              </Button>
+                {task.id === ID && task.date >= currentDate && (
+                  <Dialog open={open} onClose={handleClose} fullWidth>
+                    <DialogTitle>Edit task</DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Edit Task"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={onEdit}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Cancel</Button>
+                      <Button onClick={onSave}>Save</Button>
+                    </DialogActions>
+                  </Dialog>
+                )}
+
+                <Button
+                  style={{
+                    width: 100,
+                    backgroundColor: "rgb(129, 53, 53)",
+                    color: "white",
+                  }}
+                  startIcon={<DeleteIcon />}
+                  variant="contained"
+                  onClick={() => onDeleteTask(task.id)}
+                >
+                  Delete
+                </Button>
+              </Stack>
             </div>
           </li>
         </div>

@@ -1,8 +1,13 @@
 import React, { ChangeEvent, useState } from "react";
 import { addTask, showOnDate, showAll } from "../store/tasksSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { makeStyles, TextField } from "@material-ui/core";
+import { makeStyles, TextField, Typography } from "@material-ui/core";
 import { Button, Stack } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Alert from "@mui/material/Alert";
 
 const useStyles = makeStyles({
   form: {
@@ -19,37 +24,6 @@ const useStyles = makeStyles({
     padding: "5px",
     fontWeight: "bolder",
   },
-  showBtn: {
-    marginLeft: "1rem",
-    backgroundColor: "lightseagreen",
-    color: "black",
-    borderStyle: "none",
-    padding: "8px",
-    borderRadius: "5px",
-  },
-  newTaskLabel: {
-    fontWeight: 600,
-  },
-  newTask: {
-    fontSize: "1rem",
-    marginTop: "10px",
-    width: "100%",
-    padding: "5px",
-    border: " 1px solid lightseagreen",
-  },
-  submitBtn: {
-    fontSize: "0.9rem",
-    marginTop: "1rem",
-    padding: "10px",
-    borderRadius: "5px",
-    backgroundColor: "lightseagreen",
-    color: "black",
-    borderStyle: "none",
-    marginLeft: "1rem",
-  },
-  errorMsg: {
-    color: "rgb(181, 83, 83)",
-  },
 });
 
 export const NewTask: React.FC = () => {
@@ -58,8 +32,18 @@ export const NewTask: React.FC = () => {
   const [newTask, setNewTask] = useState<string>("");
   const [taskDate, setTaskDate] = useState<string>(currentDate);
   const selectedDate = useAppSelector((state) => state.tasks.selectedDate);
-
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setTaskDate(currentDate);
+    setNewTask("");
+  };
 
   const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -72,8 +56,8 @@ export const NewTask: React.FC = () => {
     } else if (taskDate < currentDate) {
       setNewTask("");
       setTaskDate(currentDate);
-      return;
     }
+    handleClose();
   };
 
   const handleDate = (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +83,13 @@ export const NewTask: React.FC = () => {
   return (
     <div>
       <form className={classes.form}>
+        <Typography
+          variant="h3"
+          style={{ color: "#00adb5", marginBottom: "50px" }}
+          align="center"
+        >
+          Click on Add Task Button to add tasks.
+        </Typography>
         <div className={classes.calendarDiv}>
           <Stack display="block" spacing={2} direction="row">
             <input
@@ -113,41 +104,49 @@ export const NewTask: React.FC = () => {
             </Button>
           </Stack>
         </div>
-        <Stack spacing={2} direction="column">
-          <label
-            htmlFor="new-task"
-            id="new-task-label"
-            className={classes.newTaskLabel}
+
+        <div>
+          <Button
+            style={{
+              backgroundColor: "#00adb5",
+              color: "white",
+              borderStyle: "none",
+            }}
+            variant="outlined"
+            onClick={handleClickOpen}
           >
-            Input Task
-          </label>
-          <Stack spacing={2} direction="column">
-            <TextField
-              type="text"
-              label="Enter Tasks"
-              variant="outlined"
-              onChange={handleChange}
-              size="small"
-              value={newTask}
-            />
-          </Stack>
-          {taskDate < currentDate ? (
-            <p className={classes.errorMsg}>Do not enter past date!</p>
-          ) : null}
-
-          <Stack spacing={2} direction="row">
-            <input
-              type="date"
-              onChange={handleTaskDateChange}
-              value={taskDate}
-              defaultValue={currentDate}
-            />
-
-            <Button variant="contained" onClick={handleSubmit}>
-              Add Task
-            </Button>
-          </Stack>
-        </Stack>
+            Add Task
+          </Button>
+          <Dialog open={open} onClose={handleClose} fullWidth>
+            <DialogTitle>Enter tasks</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Enter Tasks"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={handleChange}
+                value={newTask}
+              />
+              {taskDate < currentDate ? (
+                <Alert severity="warning">Do not enter past date!</Alert>
+              ) : null}
+              <TextField
+                type="date"
+                onChange={handleTaskDateChange}
+                value={taskDate}
+                defaultValue={currentDate}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={handleSubmit}>Add Task</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
       </form>
     </div>
   );
