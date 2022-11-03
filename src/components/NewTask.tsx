@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
 import { addTask, showOnDate, showAll } from "../store/tasksSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { makeStyles, TextField, Typography } from "@material-ui/core";
+import { TextField, Typography } from "@material-ui/core";
 import { Button, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   form: {
@@ -50,7 +51,7 @@ export const NewTask: React.FC = () => {
     if (!newTask || !taskDate) {
       return;
     } else if (newTask && taskDate >= currentDate) {
-      dispatch(addTask({ text: newTask, date: taskDate }));
+      dispatch(addTask({ text: newTask, date: taskDate, status: "wip" }));
       setNewTask("");
       setTaskDate(currentDate);
     } else if (taskDate < currentDate) {
@@ -138,7 +139,6 @@ export const NewTask: React.FC = () => {
                 type="date"
                 onChange={handleTaskDateChange}
                 value={taskDate}
-                defaultValue={currentDate}
               />
             </DialogContent>
             <DialogActions>

@@ -6,6 +6,7 @@ interface Task {
   id: string;
   text: string;
   date: string;
+  status: string;
 }
 
 interface TasksSliceState {
@@ -23,13 +24,17 @@ export const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<{ text: string; date: string }>) => {
+    addTask: (
+      state,
+      action: PayloadAction<{ text: string; date: string; status: string }>
+    ) => {
       state.tasks = [
         ...state.tasks,
         {
           id: Math.random().toString(),
           text: action.payload.text,
           date: action.payload.date,
+          status: action.payload.status,
         },
       ];
     },
@@ -54,10 +59,19 @@ export const tasksSlice = createSlice({
     showAll: (state) => {
       state.selectedDate = null;
     },
+    onDrop: (state, action: PayloadAction<string>) => {
+      const draggedTask = state.tasks.filter(
+        (task) => task.id === action.payload
+      )[0];
+      draggedTask.status = "done";
+      state.tasks
+        .filter((task) => task.id !== action.payload)
+        .concat(draggedTask)[0];
+    },
   },
 });
 
-export const { addTask, removeTask, editTask, showOnDate, showAll } =
+export const { addTask, removeTask, editTask, showOnDate, showAll, onDrop } =
   tasksSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
